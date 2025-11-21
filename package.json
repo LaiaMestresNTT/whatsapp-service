@@ -1,0 +1,14 @@
+{
+  "name": "whatsapp-service",
+  "version": "1.0.0",
+  "main": "src/whatsapp-comunicator.js",
+  "dependencies": {
+    "@kafkajs/confluent-schema-registry": "^3.9.0",
+    "kafkajs": "^2.2.4",
+    "mongoose": "^8.20.0",
+    "puppeteer": "^24.30.0",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "file:./lib/whatsapp-web.js",
+    "wwebjs-mongo": "^1.1.0"
+  }
+}
