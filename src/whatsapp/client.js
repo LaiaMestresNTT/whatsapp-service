@@ -36,8 +36,8 @@ async function initializeClient() {
     });
 
 
-    client.on('authenticated', () => console.log('☑️ Autenticación exitosa.'));
-    client.on('ready', () => console.log('☑️ WhatsApp conectado'));
+    client.once('authenticated', () => console.log('☑️ Autenticación exitosa.'));
+    client.once('ready', () => console.log('☑️ WhatsApp conectado'));
     client.on('disconnected', reason => console.warn('⚠️ Cliente desconectado:', reason));
 
 
