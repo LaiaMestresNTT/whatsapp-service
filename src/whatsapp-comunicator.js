@@ -12,7 +12,7 @@ async function start() {
   const schema = {
     type: 'record',
     name: 'WhatsAppMessage', // Corrige el nombre (sin typo)
-    namespace: 'com.alertbotspring.avro',
+    namespace: 'com.alertbot.avro',
     fields: [
       { name: 'id', type: 'string' },
       { name: 'text', type: 'string' }

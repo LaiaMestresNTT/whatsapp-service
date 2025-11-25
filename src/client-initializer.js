@@ -35,23 +35,11 @@ async function initializeClient() {
       qrcode.generate(qr, { small: true });
     });
 
-
-    client.on('authenticated', () => {
-      console.log('✅ Autenticación exitosa.');
-    });
-
-    client.on('auth_failure', msg => {
-      console.error('❌ Fallo de autenticación:', msg);
-    });
-
-
+    client.on('authenticated', () => console.log('✅ Autenticación exitosa.'));
+    client.on('auth_failure', msg => console.error('❌ Fallo de autenticación:', msg));
     client.on('ready', () => console.log('✅ WhatsApp conectado'));
+    client.on('disconnected', reason => console.warn('⚠️ Cliente desconectado. Motivo:', reason));
 
-
-    client.on('disconnected', reason => {
-      console.warn('⚠️ Cliente desconectado. Motivo:', reason);
-
-    });
 
     await client.initialize();
     return client;
