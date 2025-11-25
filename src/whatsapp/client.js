@@ -1,4 +1,4 @@
-const { Client, RemoteAuth } = require('../lib/whatsapp-web.js');
+const { Client, RemoteAuth } = require('../../lib/whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 async function initializeClient() {
   try {
     await mongoose.connect('mongodb://mongo:27017/auth_session');
-    console.log('✅ Conectado a MongoDB');
+    console.log('☑️ Conectado a MongoDB');
 
     const store = new MongoStore({ mongoose });
 
@@ -35,18 +35,41 @@ async function initializeClient() {
       qrcode.generate(qr, { small: true });
     });
 
-    client.on('authenticated', () => console.log('✅ Autenticación exitosa.'));
-    client.on('auth_failure', msg => console.error('❌ Fallo de autenticación:', msg));
-    client.on('ready', () => console.log('✅ WhatsApp conectado'));
-    client.on('disconnected', reason => console.warn('⚠️ Cliente desconectado. Motivo:', reason));
+
+    client.on('authenticated', () => console.log('☑️ Autenticación exitosa.'));
+    client.on('ready', () => console.log('☑️ WhatsApp conectado'));
+    client.on('disconnected', reason => console.warn('⚠️ Cliente desconectado:', reason));
+
 
 
     await client.initialize();
     return client;
   } catch (err) {
     console.error('❌ Error inicializando cliente:', err);
+    return null;
   }
 }
 
-module.exports = initializeClient;
+
+
+function waitForReady(client, { timeoutMs = 120000 } = {}) {
+  return new Promise((resolve, reject) => {
+    const onReady = () => {
+      clearTimeout(timer);
+      console.log('✅ WhatsApp está listo, continuando con el arranque...');
+      resolve();
+    };
+
+    const timer = setTimeout(() => {
+      client.removeListener('ready', onReady);
+      reject(new Error(`Timeout esperando 'ready' después de ${timeoutMs}ms`));
+    }, timeoutMs);
+
+    client.once('ready', onReady);
+  });
+}
+
+
+
+module.exports = { initClient: initializeClient, waitForReady };
 

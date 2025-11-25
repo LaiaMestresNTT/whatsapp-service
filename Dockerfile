@@ -23,4 +23,4 @@ COPY package*.json ./
 COPY lib ./lib
 RUN npm install puppeteer && npm install
 COPY src ./src
-CMD ["node", "src/whatsapp-comunicator.js"]
+CMD ["node", "src/index.js"]
