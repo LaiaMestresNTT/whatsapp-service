@@ -20,6 +20,7 @@ async function initializeClient() {
       puppeteer: {
         headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        ignoreHTTPSErrors: true,
         timeout: 60000
       },
       webVersion: '2.2410.1',
