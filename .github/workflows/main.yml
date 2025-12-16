@@ -1,0 +1,90 @@
+
+name: CI/CD Node → Docker Hub
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:     [ "v*.*.*" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  IMAGE_NAMESPACE: ${{ secrets.DOCKERHUB_USERNAME }}
+  IMAGE_NAME: ${{ github.event.repository.name }}
+
+jobs:
+  node_build_test:
+    name: Build + Test (Node v24.11.1)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Instala Node v24.11.1
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+          cache: 'npm'
+
+      # Instalación reproducible basada en package-lock.json
+      - name: Instalar dependencias
+        run: npm ci
+
+      # Ejecuta tests si existe script "test" (no falla si no existe)
+      - name: Ejecutar tests (si existen)
+        run: npm test --if-present
+
+      # Compila si tienes script "build" (por ejemplo TS → dist/) (opcional)
+      - name: Build (si existe script)
+        run: npm run build --if-present
+
+  docker:
+    name: Build & Push Docker image
+    runs-on: ubuntu-latest
+    needs: [ node_build_test ]
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extraer metadatos (tags y labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: docker.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=tag
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Construir y publicar imagen
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Descomenta para multi-arch si lo necesitas:
+          # platforms: linux/amd64,linux/arm64
+
+      - name: Mostrar tags publicados
+        if: ${{ github.event_name != 'pull_request' }}
