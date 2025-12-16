@@ -21,22 +21,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Instala Node v24.11.1
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '24.11.1'
           cache: 'npm'
 
-      # Instalación reproducible basada en package-lock.json
       - name: Instalar dependencias
         run: npm ci
 
-      # Ejecuta tests si existe script "test" (no falla si no existe)
       - name: Ejecutar tests (si existen)
         run: npm test --if-present
 
-      # Compila si tienes script "build" (por ejemplo TS → dist/) (opcional)
       - name: Build (si existe script)
         run: npm run build --if-present
 
@@ -88,3 +84,4 @@ jobs:
 
       - name: Mostrar tags publicados
         if: ${{ github.event_name != 'pull_request' }}
+        run: echo "${{ steps.meta.outputs.tags }}"
