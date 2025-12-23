@@ -19,17 +19,37 @@ async function initializeClient() {
       }),
       puppeteer: {
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+        executablePath: '/usr/bin/chromium',
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            //'--single-process',
+            //'--no-zygote',
+            '--ignore-certificate-errors',
+            '--ignore-ssl-errors',
+            '--proxy-server="direct://"',
+            '--proxy-bypass-list=*'],
         ignoreHTTPSErrors: true,
         timeout: 60000
       },
-      webVersion: '2.2410.1',
+      /*webVersion: '2.2410.1',
       webVersionCache: {
          type: 'remote',
          remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/wa-version.json'
-       }
+       }*/
 
     });
+
+    client.on('browser_log', (msg) => {
+        console.log('🌐 [Navegador]:', msg);
+    });
+
+    // Este log es vital: te dirá si la página de WhatsApp carga o da error
+    client.on('disconnected', (reason) => {
+        console.log('❌ El navegador se desconectó por:', reason);
+    });
+
 
     client.on('qr', qr => {
       console.log('📲 Escanea este QR para vincular tu dispositivo:');

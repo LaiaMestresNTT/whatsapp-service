@@ -1,26 +1,27 @@
 FROM node:18
-WORKDIR /app
+
+# Instalamos chromium y certificados actualizados
 RUN apt-get update && apt-get install -y \
-    wget \
+    chromium \
     ca-certificates \
     fonts-liberation \
     libasound2 \
-    libatk-bridge2.0-0 \
-    libatk1.0-0 \
-    libcups2 \
-    libdrm2 \
-    libgbm1 \
-    libgtk-3-0 \
-    libnspr4 \
     libnss3 \
-    libx11-xcb1 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxrandr2 \
+    lsb-release \
     xdg-utils \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+WORKDIR /app
+
+# Copiamos solo lo necesario para instalar
 COPY package*.json ./
+RUN npm install
+
+# Copiamos el resto
 COPY lib ./lib
-RUN npm install puppeteer && npm install
 COPY src ./src
+
 CMD ["node", "src/index.js"]
