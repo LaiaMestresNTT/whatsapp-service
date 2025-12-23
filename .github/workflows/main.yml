@@ -80,7 +80,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           # Descomenta para multi-arch si lo necesitas:
-          # platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64
 
       - name: Mostrar tags publicados
         if: ${{ github.event_name != 'pull_request' }}
