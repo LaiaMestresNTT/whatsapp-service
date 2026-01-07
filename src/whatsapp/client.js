@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 async function initializeClient() {
   try {
-    await mongoose.connect('mongodb://mongo:27017/auth_session');
+    await mongoose.connect('mongodb://mongo:27017/auth_session?replicaSet=rs0&authSource=admin');
     console.log('☑️ Conectado a MongoDB');
 
     const store = new MongoStore({ mongoose });
