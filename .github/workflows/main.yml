@@ -81,6 +81,9 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           # Descomenta para multi-arch si lo necesitas:
           platforms: linux/amd64,linux/arm64
+          # Cache en el registro: reutiliza capas entre builds
+          cache-from: type=registry,ref=docker.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to:   type=registry,ref=docker.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
       - name: Mostrar tags publicados
         if: ${{ github.event_name != 'pull_request' }}
