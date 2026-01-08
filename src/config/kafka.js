@@ -4,7 +4,7 @@ const { SchemaRegistry, SchemaType } = require('@kafkajs/confluent-schema-regist
 async function setupKafka() {
   const kafka = new Kafka({
     clientId: 'whatsapp-service',
-    brokers: ['broker:29092'],
+    brokers: ['broker:9092'],
     retry: {
       initialRetryTime: 300,
       retries: 10 // Aumentamos reintentos por si el broker está arrancando
