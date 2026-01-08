@@ -12,11 +12,14 @@ async function initializeClient() {
     const store = new MongoStore({ mongoose });
 
     const client = new Client({
-      authStrategy: new RemoteAuth({
+      /*authStrategy: new RemoteAuth({
         clientId: 'whatsapp-service',
         store: store,
         backupSyncIntervalMs: 300000
-      }),
+      }), REMOTO PARA ALMACENAR EN MONGO --> YA IMPLEMENTAREMOS EN EL FUTURO*/
+      authStrategy: new LocalAuth({
+              dataPath: '/app/.wwebjs_auth' // Esta ruta debe coincidir con el destino del volumen en el compose
+          }),
       puppeteer: {
         headless: true,
         executablePath: '/usr/bin/chromium',
