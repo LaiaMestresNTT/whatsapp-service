@@ -33,12 +33,6 @@ async function initializeClient() {
         ignoreHTTPSErrors: true,
         timeout: 60000
       },
-      /*webVersion: '2.2410.1',
-      webVersionCache: {
-         type: 'remote',
-         remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/wa-version.json'
-       }*/
-
     });
 
     client.on('browser_log', (msg) => {
