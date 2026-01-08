@@ -20,7 +20,7 @@ const { startConsumer } = require('./kafka/consumer');
     }
     await waitForReady(client, { timeoutMs: 180000 })
 
-    //LISTENERS + CONSUMER
+    // LISTENERS + CONSUMER
     console.log('⏩ Inicializando listeners y consumers...')
     attachListeners(client, producer, registry, schemaId);
     await startConsumer(consumer, client);
