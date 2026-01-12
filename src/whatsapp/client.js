@@ -1,6 +1,6 @@
 const { Client, RemoteAuth, LocalAuth } = require('../../lib/whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-//const { MongoStore } = require('wwebjs-mongo');
+const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
 
 
