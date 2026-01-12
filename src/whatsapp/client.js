@@ -1,6 +1,6 @@
-const { Client, RemoteAuth } = require('../../lib/whatsapp-web.js');
+const { Client, RemoteAuth, LocalAuth } = require('../../lib/whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const { MongoStore } = require('wwebjs-mongo');
+//const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
 
 
@@ -17,9 +17,11 @@ async function initializeClient() {
         store: store,
         backupSyncIntervalMs: 300000
       }), REMOTO PARA ALMACENAR EN MONGO --> YA IMPLEMENTAREMOS EN EL FUTURO*/
+
       authStrategy: new LocalAuth({
-              dataPath: '/app/.wwebjs_auth' // Esta ruta debe coincidir con el destino del volumen en el compose
-          }),
+          dataPath: '/app/.wwebjs_auth' // Esta ruta debe coincidir con el destino del volumen en el compose
+      }),
+
       puppeteer: {
         headless: true,
         executablePath: '/usr/bin/chromium',
@@ -27,15 +29,14 @@ async function initializeClient() {
             '--no-sandbox',
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
-            //'--single-process',
-            //'--no-zygote',
             '--ignore-certificate-errors',
             '--ignore-ssl-errors',
             '--proxy-server="direct://"',
             '--proxy-bypass-list=*'],
         ignoreHTTPSErrors: true,
         timeout: 60000
-      },
+      }
+
     });
 
     client.on('browser_log', (msg) => {
@@ -58,36 +59,31 @@ async function initializeClient() {
     client.once('ready', () => console.log('☑️ WhatsApp conectado'));
     client.on('disconnected', reason => console.warn('⚠️ Cliente desconectado:', reason));
 
-
-
     await client.initialize();
     return client;
+
   } catch (err) {
     console.error('❌ Error inicializando cliente:', err);
-    return null;
+    throw err;
+
   }
 }
 
 
-
 function waitForReady(client, { timeoutMs = 120000 } = {}) {
   return new Promise((resolve, reject) => {
-    const onReady = () => {
-      clearTimeout(timer);
-      console.log('✅ WhatsApp está listo, continuando con el arranque...');
-      resolve();
-    };
+      if (client.info && client.info.wid) return resolve(); // Si ya está listo
 
-    const timer = setTimeout(() => {
-      client.removeListener('ready', onReady);
-      reject(new Error(`Timeout esperando 'ready' después de ${timeoutMs}ms`));
-    }, timeoutMs);
+      const timer = setTimeout(() => {
+        reject(new Error(`Timeout esperando 'ready' después de ${timeoutMs}ms`));
+      }, timeoutMs);
 
-    client.once('ready', onReady);
-  });
+      client.once('ready', () => {
+        clearTimeout(timer);
+        resolve();
+      });
+    });
 }
-
-
 
 module.exports = { initClient: initializeClient, waitForReady };
 
