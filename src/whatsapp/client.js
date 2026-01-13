@@ -6,6 +6,18 @@ const mongoose = require('mongoose');
 
 async function initializeClient() {
   try {
+
+    // LIMPIEZA ARCHIVOS DE SESIÓN
+    const lockPath = path.join(__dirname, '.wwebjs_auth', 'Default', 'SingletonLock');
+      if (fs.existsSync(lockPath)) {
+        try {
+          fs.unlinkSync(lockPath);
+          console.log('🧹 Archivo SingletonLock eliminado para evitar errores de sesión.');
+        } catch (e) {
+          console.warn('⚠️ No se pudo eliminar SingletonLock, pero intentando continuar...');
+        }
+    }
+
     await mongoose.connect('mongodb://mongo:27017/auth_session?replicaSet=rs0&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000');
     console.log('☑️ Conectado a MongoDB');
 
@@ -29,6 +41,9 @@ async function initializeClient() {
             '--no-sandbox',
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--no-first-run',
+            '--no-zygote',
             '--ignore-certificate-errors',
             '--ignore-ssl-errors',
             '--proxy-server="direct://"',
