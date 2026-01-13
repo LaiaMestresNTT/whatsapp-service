@@ -9,13 +9,13 @@ async function initializeClient() {
   try {
 
     // LIMPIEZA ARCHIVOS DE SESIÓN
-    const lockPath = path.join(__dirname, '.wwebjs_auth', 'Default', 'SingletonLock');
-      if (fs.existsSync(lockPath)) {
+    const sessionPath = '/app/.wwebjs_auth/session/Default/SingletonLock';
+    if (fs.existsSync(sessionPath)) {
         try {
-          fs.unlinkSync(lockPath);
-          console.log('🧹 Archivo SingletonLock eliminado para evitar errores de sesión.');
+            fs.unlinkSync(sessionPath);
+            console.log('🧹 Archivo SingletonLock eliminado para evitar errores de sesión.');
         } catch (e) {
-          console.warn('⚠️ No se pudo eliminar SingletonLock, pero intentando continuar...');
+            console.warn('⚠️ No se pudo eliminar SingletonLock:', e.message);
         }
     }
 
