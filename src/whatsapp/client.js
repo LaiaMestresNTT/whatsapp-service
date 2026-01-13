@@ -2,7 +2,8 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
-
+const fs = require('fs');
+const path = require('path');
 
 async function initializeClient() {
   try {
