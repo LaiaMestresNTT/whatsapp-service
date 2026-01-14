@@ -2,14 +2,14 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
-const fs = require('fs');
-const path = require('path');
+//const fs = require('fs');
+//const path = require('path');
 
 async function initializeClient() {
   try {
 
     // LIMPIEZA ARCHIVOS DE SESIÓN
-    const sessionPath = '/app/.wwebjs_auth/session/Default/SingletonLock';
+    /*const sessionPath = '/app/.wwebjs_auth/session/Default/SingletonLock';
     if (fs.existsSync(sessionPath)) {
         try {
             fs.unlinkSync(sessionPath);
@@ -17,7 +17,7 @@ async function initializeClient() {
         } catch (e) {
             console.warn('⚠️ No se pudo eliminar SingletonLock:', e.message);
         }
-    }
+    }*/
 
     await mongoose.connect('mongodb://mongo:27017/auth_session?replicaSet=rs0&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000');
     console.log('☑️ Conectado a MongoDB');
@@ -25,15 +25,15 @@ async function initializeClient() {
     const store = new MongoStore({ mongoose });
 
     const client = new Client({
-      /*authStrategy: new RemoteAuth({
+      authStrategy: new RemoteAuth({
         clientId: 'whatsapp-service',
         store: store,
         backupSyncIntervalMs: 300000
-      }), REMOTO PARA ALMACENAR EN MONGO --> YA IMPLEMENTAREMOS EN EL FUTURO*/
-
-      authStrategy: new LocalAuth({
-          dataPath: '/app/.wwebjs_auth' // Esta ruta debe coincidir con el destino del volumen en el compose
       }),
+
+      /*authStrategy: new LocalAuth({
+          dataPath: '/app/.wwebjs_auth' // Esta ruta debe coincidir con el destino del volumen en el compose
+      }),*/
 
       puppeteer: {
         headless: true,
