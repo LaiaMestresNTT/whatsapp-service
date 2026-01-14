@@ -7,7 +7,7 @@ const { startConsumer } = require('./kafka/consumer');
 (async () => {
   try {
     //CONFIG
-    console.log('⏩ Conectando Kafka...')
+    console.log('⏩ Conectando Kafka....')
     const { producer, consumer, registry } = await setupKafka();
     console.log('⏩ Registrando schemas avro...')
     const schemaId = await registerSchema(registry);
