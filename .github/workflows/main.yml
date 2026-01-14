@@ -82,6 +82,7 @@ jobs:
           # Descomenta para multi-arch si lo necesitas:
           platforms: linux/amd64,linux/arm64
           # Cache inline
+          cache-from: type=registry,ref=docker.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:latest
           cache-to: type=inline 
           
       - name: Mostrar tags publicados
