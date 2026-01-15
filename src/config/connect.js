@@ -11,8 +11,8 @@ async function setupConnect() {
       "tasks.max": "1",
       "topics": "whatsapp-in",
       "connection.uri": "mongodb://mongodb_container:27017/?replicaSet=rs0",
-      "database": "whatsapp_db",
-      "collection": "historial_mensajes",
+      "database": "alertbot_db",
+      "collection": "whatsapp_mensajes",
       "key.converter": "org.apache.kafka.connect.storage.StringConverter",
       "value.converter": "io.confluent.connect.avro.AvroConverter",
       "value.converter.schema.registry.url": "http://schema-registry:8081",
@@ -23,8 +23,6 @@ async function setupConnect() {
       "writemodel.strategy": "com.mongodb.kafka.connect.sink.writemodel.strategy.ReplaceOneBusinessKeyStrategy"
     }
   };
-
-  console.log(`⏳ Verificando Kafka Connect en ${CONNECT_URL}...`);
 
   // Reintento simple por si Connect tarda en arrancar
   for (let i = 0; i < 10; i++) {
@@ -38,7 +36,7 @@ async function setupConnect() {
       }
 
       await axios.post(CONNECT_URL, connectorConfig);
-      console.log(`🚀 Kafka Connector "${CONNECTOR_NAME}" configurado con éxito.`);
+      console.log(`✅️ Kafka Connector "${CONNECTOR_NAME}" configurado con éxito.`);
       return;
     } catch (error) {
       if (error.response && error.response.status === 409) {
