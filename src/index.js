@@ -3,6 +3,7 @@ const { setupKafka } = require('./config/kafka');
 const { registerSchema } = require('./config/avro-schemas');
 const { attachListeners } = require('./whatsapp/listeners');
 const { startConsumer } = require('./kafka/consumer');
+const setupConnect = require('./config/connect');
 
 (async () => {
   try {
@@ -11,6 +12,8 @@ const { startConsumer } = require('./kafka/consumer');
     const { producer, consumer, registry } = await setupKafka();
     console.log('⏩ Registrando schemas avro...')
     const schemaId = await registerSchema(registry);
+    console.log('⏩ Registrando conectores MongoSink ...')
+    await setupConnect();
 
     //CLIENT
     console.log('⏩ Inicializando cliente WhatsApp...')
