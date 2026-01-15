@@ -13,13 +13,20 @@ async function setupConnect() {
       "connection.uri": "mongodb://mongodb_container:27017/?replicaSet=rs0",
       "database": "alertbot_db",
       "collection": "whatsapp_mensajes",
-      "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+
+      // Configuración de Avro
       "value.converter": "io.confluent.connect.avro.AvroConverter",
       "value.converter.schema.registry.url": "http://schema-registry:8081",
+      "value.converter.value.subject.name.strategy": "io.confluent.kafka.serializers.subject.RecordNameStrategy",
       "value.converter.enhanced.avro.schema.support": "true",
+      "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+
+      // Manejo de errores
       "errors.tolerance": "all",
       "errors.log.enable": "true",
       "errors.log.include.messages": "true",
+
+      // Estrategia de IDs en Mongo
       "document.id.strategy": "com.mongodb.kafka.connect.sink.processor.id.strategy.PartialValueStrategy",
       "document.id.strategy.partial.value.projection.type": "allowlist",
       "document.id.strategy.partial.value.projection.list": "id",
