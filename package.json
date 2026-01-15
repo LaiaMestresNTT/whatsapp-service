@@ -4,7 +4,6 @@
   "main": "src/index.js",
   "dependencies": {
     "@kafkajs/confluent-schema-registry": "^3.9.0",
-    "axios": "^1.13.2",
     "kafkajs": "^2.2.4",
     "mongoose": "^8.20.0",
     "puppeteer": "^24.30.0",

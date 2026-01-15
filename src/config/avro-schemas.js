@@ -10,14 +10,11 @@ const schema = {
   ]
 };
 
-const TOPIC_NAME = 'whatsapp-in';
-const SUBJECT_NAME = `${TOPIC_NAME}-value`
-
+// El subject lo registra automaticamente con el "name"."namespace" del schema (eso no se puede cambiar)
 async function registerSchema(registry) {
   const { id } = await registry.register({
     type: SchemaType.AVRO,
-    schema: JSON.stringify(schema),
-    subject: SUBJECT_NAME
+    schema: JSON.stringify(schema)
   });
   console.log(`✅ Esquema registrado con ID: ${id}`);
   return id;
