@@ -10,11 +10,14 @@ const schema = {
   ]
 };
 
+const TOPIC_NAME = 'whatsapp-in';
+const SUBJECT_NAME = `${TOPIC_NAME}-value`
+
 async function registerSchema(registry) {
   const { id } = await registry.register({
     type: SchemaType.AVRO,
     schema: JSON.stringify(schema),
-    subject: 'whatsapp-in-value'
+    subject: SUBJECT_NAME
   });
   console.log(`✅ Esquema registrado con ID: ${id}`);
   return id;
