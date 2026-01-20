@@ -12,7 +12,7 @@ async function handleIncomingMessage(client, msg, producer, registry, schemaId) 
   }
 }
 
-async function handleOwnMessage(msg, producer, registry, schemaId) {
+async function handleOwnMessage(client, msg, producer, registry, schemaId) {
   if (msg.fromMe && msg.body.trim().toLowerCase().startsWith('buenas bot')) {
     const message = { id: msg.from, text: msg.body };
     await sendAvroMessage(producer, registry, schemaId, 'whatsapp-in', message);

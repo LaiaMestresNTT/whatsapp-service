@@ -64,6 +64,8 @@ async function initializeClient() {
         console.log('🌐 [Navegador]:', msg);
     });
 
+    console.log('📦 Configuración de versión web:', client.options.webVersionCache);
+
     // Este log es vital: te dirá si la página de WhatsApp carga o da error
     client.on('disconnected', (reason) => {
         console.log('❌ El navegador se desconectó por:', reason);

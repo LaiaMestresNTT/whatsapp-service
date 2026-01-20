@@ -23,7 +23,8 @@ const { startConsumer } = require('./kafka/consumer');
     // LISTENERS + CONSUMER
     console.log('⏩ Inicializando listeners y consumers...')
     attachListeners(client, producer, registry, schemaId);
-    await startConsumer(consumer, client);
+    // MAS ADELANTE INICIALIZAR EL CONSUMIDOR
+    //await startConsumer(consumer, client);
 
 
     console.log('⭐ Microservicio WhatsApp iniciado');
