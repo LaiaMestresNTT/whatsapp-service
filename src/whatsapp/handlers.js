@@ -1,10 +1,11 @@
 const { sendAvroMessage } = require('../kafka/producer');
 
-async function handleIncomingMessage(msg, producer, registry, schemaId) {
+async function handleIncomingMessage(client, msg, producer, registry, schemaId) {
   const texto = msg.body.trim().toLowerCase();
   if (texto.startsWith('buenas bot')) {
     console.log(`🤖 Invocación detectada: ${msg.body}`);
-    await msg.reply('✅ Mensaje recibido por el Bot, ¡hola!');
+
+    await client.sendMessage(msg.from, '✅ Mensaje recibido por el Bot, ¡hola!');
 
     const message = { id: msg.from, text: msg.body };
     await sendAvroMessage(producer, registry, schemaId, 'whatsapp-in', message);

@@ -7,7 +7,6 @@ const mongoose = require('mongoose');
 
 async function initializeClient() {
   try {
-
     // LIMPIEZA ARCHIVOS DE SESIÓN
     /*const sessionPath = '/app/.wwebjs_auth/session/Default/SingletonLock';
     if (fs.existsSync(sessionPath)) {
@@ -34,6 +33,12 @@ async function initializeClient() {
       /*authStrategy: new LocalAuth({
           dataPath: '/app/.wwebjs_auth' // Esta ruta debe coincidir con el destino del volumen en el compose
       }),*/
+
+      // CARGAMOS UNA VERSIÓN MÁS ANTIGUA DE WHATSAPP PARA PODER USAR LAS FUNCIONES ANTIGUAS
+      /*webVersionCache: {
+          type: 'remote',
+          remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html',
+      },*/
 
       puppeteer: {
         headless: true,
