@@ -34,19 +34,6 @@ async function initializeClient() {
           dataPath: '/app/.wwebjs_auth' // Esta ruta debe coincidir con el destino del volumen en el compose
       }),*/
 
-      // CARGAMOS UNA VERSIÓN MÁS ANTIGUA DE WHATSAPP PARA PODER USAR LAS FUNCIONES ANTIGUAS
-      /*webVersionCache: {
-          type: 'remote',
-          remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html',
-      },*/
-
-      //webVersionCache: { type: 'remote', remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html' },
-
-      /*webVersionCache: {
-          type: 'local',
-          path: './.wwebjs_cache'
-      },*/
-
       puppeteer: {
         headless: "new",
         executablePath: '/usr/bin/chromium',
@@ -63,7 +50,8 @@ async function initializeClient() {
             '--proxy-server="direct://"',
             '--proxy-bypass-list=*'],
         ignoreHTTPSErrors: true,
-        timeout: 60000
+        authTimeoutMs: 120000,
+        qrMaxRetries: 10,
       }
 
     });
@@ -79,15 +67,10 @@ async function initializeClient() {
       qrcode.generate(qr, { small: true });
     });
 
-
-    // Este log es vital: te dirá si la página de WhatsApp carga o da error
-    client.on('disconnected', (reason) => {
-        console.log('❌ El navegador se desconectó por:', reason);
-    });
-
-
     client.once('authenticated', () => console.log('☑️ Autenticación exitosa.'));
     client.once('ready', () => console.log('☑️ WhatsApp conectado'));
+
+    // Este log es vital: te dirá si la página de WhatsApp carga o da error
     client.on('disconnected', reason => console.warn('⚠️ Cliente desconectado:', reason));
 
     await client.initialize();
