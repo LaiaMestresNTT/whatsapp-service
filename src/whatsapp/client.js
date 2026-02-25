@@ -67,13 +67,6 @@ async function initializeClient() {
 
     console.log('📦 Configuración de versión web:', client.options.webVersionCache);
 
-    client.on('qr', qr => {
-      console.log('📲 Escanea este QR para vincular tu dispositivo:');
-      qrcode.generate(qr, { small: true });
-    });
-
-    client.once('authenticated', () => console.log('☑️ Autenticación exitosa.'));
-
     client.on('loading_screen', (percent, message) => {
         console.log('⏳ CARGANDO WHATSAPP:', percent, '% -', message);
     });
@@ -81,6 +74,13 @@ async function initializeClient() {
     client.on('remote_session_saved', () => {
         console.log('✅ Sesión guardada en MongoDB (RemoteAuth)');
     });
+
+    client.on('qr', qr => {
+      console.log('📲 Escanea este QR para vincular tu dispositivo:');
+      qrcode.generate(qr, { small: true });
+    });
+
+    client.once('authenticated', () => console.log('☑️ Autenticación exitosa.'));
 
     client.once('ready', () => console.log('☑️ WhatsApp conectado'));
 
