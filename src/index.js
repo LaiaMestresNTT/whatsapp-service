@@ -18,7 +18,7 @@ const { startConsumer } = require('./kafka/consumer');
     if (!client) {
       throw new Error('Cliente WhatsApp no inicializado');
     }
-    await waitForReady(client, { timeoutMs: 180000 })
+    await waitForReady(client, { timeoutMs: 300000 })
 
     // LISTENERS + CONSUMER
     console.log('⏩ Inicializando listeners y consumers...')
