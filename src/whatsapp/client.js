@@ -35,7 +35,7 @@ async function initializeClient() {
       }),*/
 
       puppeteer: {
-        headless: "new",
+        headless: true,
         executablePath: '/usr/bin/chromium',
         args: [
             '--no-sandbox',
@@ -47,6 +47,7 @@ async function initializeClient() {
             '--single-process',
             '--ignore-certificate-errors',
             '--ignore-ssl-errors',
+            '--disable-extensions',
             '--proxy-server="direct://"',
             '--proxy-bypass-list=*',
             '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'],
@@ -82,11 +83,18 @@ async function initializeClient() {
     });
 
     client.on('authenticated', async () => {
-        console.log('☑️ Autenticado. Esperando 5 segundos para sacar captura...');
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        console.log('☑️ Autenticado. Esperando captura...');
         try {
-            await client.puppeteerPage.screenshot({ path: 'debug_whatsapp.png' });
-            console.log('📸 Captura guardada como debug_whatsapp.png. ¡Revísala!');
+            const browser = client.pupBrowser;
+            const pages = await browser.pages();
+            const page = pages[0]; // La primera página suele ser WhatsApp Web
+
+            if (page) {
+                await page.screenshot({ path: 'debug_whatsapp.png' });
+                console.log('📸 Captura guardada.');
+            } else {
+                console.log('❌ No se encontró ninguna página abierta.');
+            }
         } catch (e) {
             console.log('No pude sacar la captura:', e);
         }
