@@ -5,6 +5,7 @@ async function handleIncomingMessage(client, msg, producer, registry, schemaId) 
   if (texto.startsWith('buenas bot')) {
     console.log(`🤖 Invocación detectada: ${msg.body}`);
 
+    // NO VA LA RESPUESTA AUTOMÁTICA
     //await client.sendMessage(msg.from, '✅ Mensaje recibido por el Bot, ¡hola!');
 
     const message = { id: msg.from, text: msg.body };
