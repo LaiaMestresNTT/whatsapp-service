@@ -81,7 +81,16 @@ async function initializeClient() {
       qrcode.generate(qr, { small: true });
     });
 
-    client.once('authenticated', () => console.log('☑️ Autenticación exitosa.'));
+    client.on('authenticated', async () => {
+        console.log('☑️ Autenticado. Esperando 5 segundos para sacar captura...');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        try {
+            await client.puppeteerPage.screenshot({ path: 'debug_whatsapp.png' });
+            console.log('📸 Captura guardada como debug_whatsapp.png. ¡Revísala!');
+        } catch (e) {
+            console.log('No pude sacar la captura:', e);
+        }
+    });
 
     client.once('ready', () => console.log('☑️ WhatsApp conectado'));
 
