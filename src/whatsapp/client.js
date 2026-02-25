@@ -27,7 +27,7 @@ async function initializeClient() {
       authStrategy: new RemoteAuth({
         clientId: 'whatsapp-service',
         store: store,
-        backupSyncIntervalMs: 300000
+        backupSyncIntervalMs: 600000
       }),
 
       /*authStrategy: new LocalAuth({
@@ -73,6 +73,15 @@ async function initializeClient() {
     });
 
     client.once('authenticated', () => console.log('☑️ Autenticación exitosa.'));
+
+    client.on('loading_screen', (percent, message) => {
+        console.log('⏳ CARGANDO WHATSAPP:', percent, '% -', message);
+    });
+
+    client.on('remote_session_saved', () => {
+        console.log('✅ Sesión guardada en MongoDB (RemoteAuth)');
+    });
+
     client.once('ready', () => console.log('☑️ WhatsApp conectado'));
 
     // Este log es vital: te dirá si la página de WhatsApp carga o da error
