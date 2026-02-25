@@ -56,11 +56,6 @@ async function initializeClient() {
         qrMaxRetries: 10,
       },
 
-      webVersionCache: {
-          type: 'remote',
-          remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html',
-        },
-
     });
 
     client.on('browser_log', (msg) => {
@@ -82,23 +77,7 @@ async function initializeClient() {
       qrcode.generate(qr, { small: true });
     });
 
-    client.on('authenticated', async () => {
-        console.log('☑️ Autenticado. Esperando captura...');
-        try {
-            const browser = client.pupBrowser;
-            const pages = await browser.pages();
-            const page = pages[0]; // La primera página suele ser WhatsApp Web
-
-            if (page) {
-                await page.screenshot({ path: 'debug_whatsapp.png' });
-                console.log('📸 Captura guardada.');
-            } else {
-                console.log('❌ No se encontró ninguna página abierta.');
-            }
-        } catch (e) {
-            console.log('No pude sacar la captura:', e);
-        }
-    });
+    client.on('authenticated', async () => { console.log('☑️ Autenticación exitosa'); });
 
     setInterval(async () => {
         try {
