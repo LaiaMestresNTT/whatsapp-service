@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y \
     xdg-utils \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+#ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 WORKDIR /app
