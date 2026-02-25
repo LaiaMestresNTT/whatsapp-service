@@ -48,7 +48,7 @@ async function initializeClient() {
       },*/
 
       puppeteer: {
-        headless: true,
+        headless: "new",
         executablePath: '/usr/bin/chromium',
         args: [
             '--no-sandbox',
