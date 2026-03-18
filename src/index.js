@@ -10,7 +10,7 @@ const { startConsumer } = require('./kafka/consumer');
     console.log('⏩ Conectando Kafka....')
     const { producer, consumer, registry } = await setupKafka();
     console.log('⏩ Registrando schemas avro...')
-    const schemaId = await registerSchema(registry);
+    const schemaIds = await registerSchema(registry);
 
     //CLIENT
     console.log('⏩ Inicializando cliente WhatsApp...')
@@ -22,9 +22,9 @@ const { startConsumer } = require('./kafka/consumer');
 
     // LISTENERS + CONSUMER
     console.log('⏩ Inicializando listeners y consumers...')
-    attachListeners(client, producer, registry, schemaId);
-    // MAS ADELANTE INICIALIZAR EL CONSUMIDOR
-    //await startConsumer(consumer, client);
+    await consumer.subscribe({ topic: 'whatsapp-out' });
+    attachListeners(client, producer, registry, schemaIds.messageId);
+    await startConsumer(consumer, client, registry);
 
 
     console.log('⭐ Microservicio WhatsApp iniciado');

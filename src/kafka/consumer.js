@@ -1,13 +1,17 @@
-async function startConsumer(consumer, client) {
+async function startConsumer(consumer, client, registry) {
   try {
     await consumer.run({
       eachMessage: async ({ message }) => {
         try {
-          const { to, text } = JSON.parse(message.value.toString());
-          await client.sendMessage(to, text);
-          console.log(`✅ 📩  Respuesta enviada a ${to}: ${text}`);
+          const decoded = await registry.decode(message.value);
+          const userId = decoded.user_id;
+          const text = decoded.message;
+
+          await client.sendMessage(userId, text);
+
+          console.log(`✅ 📩 Respuesta enviada a ${userId}: ${text}`);
         } catch (err) {
-          console.error('❌ 📩  Error procesando mensaje del consumidor:', err);
+          console.error('❌ 📩 Error procesando mensaje del consumidor:', err);
         }
       }
     });
