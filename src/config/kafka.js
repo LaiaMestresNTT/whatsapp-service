@@ -18,7 +18,17 @@ async function setupKafka() {
 
   await producer.connect();
   await consumer.connect();
-  //await consumer.subscribe({ topic: 'whatsapp-out' });
+
+ // Crear topics si no existen
+   await admin.connect();
+   await admin.createTopics({
+     waitForLeaders: true,
+     topics: [
+       { topic: 'whatsapp-in', numPartitions: 1, replicationFactor: 1 },
+       { topic: 'whatsapp-out', numPartitions: 1, replicationFactor: 1 }
+     ]
+   });
+   await admin.disconnect();
 
   console.log(`✅ Kafka configurado correctamente`);
   return { producer, consumer, registry };
