@@ -58,12 +58,6 @@ async function initializeClient() {
 
     });
 
-    client.on('browser_log', (msg) => {
-        console.log('🌐 [Navegador]:', msg);
-    });
-
-    console.log('📦 Configuración de versión web:', client.options.webVersionCache);
-
     client.on('loading_screen', (percent, message) => {
         console.log('⏳ CARGANDO WHATSAPP:', percent, '% -', message);
     });
@@ -79,25 +73,6 @@ async function initializeClient() {
 
     client.on('authenticated', async () => { console.log('☑️ Autenticación exitosa'); });
 
-    setInterval(async () => {
-        try {
-            // En versiones recientes, pupPage puede no estar disponible
-            // hasta que el navegador abre. Usamos pupBrowser para estar seguros.
-            if (client.pupBrowser) {
-                const pages = await client.pupBrowser.pages();
-                if (pages.length > 0) {
-                    const page = pages[0];
-                    console.log('--- MONITOREO ---');
-                    console.log('URL:', page.url());
-                    console.log('Título:', await page.title());
-                }
-            }
-        } catch (e) {
-            console.log('Monitoreo: Navegador aún no disponible');
-        }
-    }, 10000);
-
-
     client.once('ready', () => console.log('☑️ WhatsApp conectado'));
 
     // Este log es vital: te dirá si la página de WhatsApp carga o da error
@@ -112,7 +87,6 @@ async function initializeClient() {
 
   }
 }
-
 
 function waitForReady(client, { timeoutMs = 120000 } = {}) {
   return new Promise((resolve, reject) => {
