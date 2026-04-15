@@ -4,7 +4,7 @@ const { SchemaRegistry, SchemaType } = require('@kafkajs/confluent-schema-regist
 async function setupKafka() {
   const kafka = new Kafka({
     clientId: 'whatsapp-service',
-    brokers: ['broker:9092'],
+    brokers: [process.env.KAFKA_BOOTSTRAP_SERVERS || 'broker:9092'],
     retry: {
       initialRetryTime: 300,
       retries: 10 // Aumentamos reintentos por si el broker está arrancando
@@ -14,7 +14,7 @@ async function setupKafka() {
   const admin = kafka.admin();
   const producer = kafka.producer({ createPartitioner: Partitioners.LegacyPartitioner });
   const consumer = kafka.consumer({ groupId: 'whatsapp-out-group' });
-  const registry = new SchemaRegistry({ host: 'http://schema-registry:8081' });
+  const registry = new SchemaRegistry({ host: process.env.SCHEMA_REGISTRY_URL || 'http://schema-registry:8081' });
 
   await producer.connect();
   await consumer.connect();
