@@ -2,6 +2,7 @@ const { Client, LocalAuth, RemoteAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
+
 //const fs = require('fs');
 //const path = require('path');
 
@@ -18,7 +19,7 @@ async function initializeClient() {
         }
     }*/
 
-    await mongoose.connect('mongodb://mongo:27017/auth_session?replicaSet=rs0&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000');
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb://mongo:27017/auth_session?replicaSet=rs0&serverSelectionTimeoutMS=5000&connectTimeoutMS=10000');
     console.log('☑️ Conectado a MongoDB');
 
     const store = new MongoStore({ mongoose });
